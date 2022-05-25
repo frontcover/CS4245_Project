@@ -1,15 +1,9 @@
-%% Creates a quick look of Range-Time and Spectrograms from a data file
+%% Generate Point Clouds for HAR
 %==========================================================================
-% Author UoG Radar Group
+% Authors #1 Simin Zhu
+% Authors #3 Chakir
+% Authors #2 Mujtaba
 % Version 1.0
-
-% The user has to select manually the range bins over which the
-% spectrograms are calculated. There may be different ways to calculate the
-% spectrogram (e.g. coherent sum of range bins prior to STFT). 
-% Note that the scripts have to be in the same folder where the data file
-% is located, otherwise uigetfile() and textscan() give an error. The user
-% may replace those functions with manual read to the file path of a
-% specific data file
 %==========================================================================
 
 %% Extract all the files
