@@ -1,4 +1,4 @@
-function [Data_spec_MTI2,idx_r] = Spec_Generation(Data_range_MTI,is_plot)
+function [Data_spec_MTI2,idx_r] = Spec_Generation(Data_range_MTI,TimeWindowLength,is_plot)
 
 %% Target localization
 Ns = size(Data_range_MTI,2);
@@ -11,7 +11,6 @@ idx_r = round(medfilt1(idx_r,100));
 
 %% Generating the Spectrogram
 % Parameters for STFT
-TimeWindowLength = 200;
 OverlapFactor = 0;
 OverlapLength = round(TimeWindowLength*OverlapFactor);
 Pad_Factor = 1;
