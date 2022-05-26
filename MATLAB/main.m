@@ -7,8 +7,8 @@
 %==========================================================================
 
 %% Extract all the files
-Dir = pwd;
-rootdir = dir(fullfile(Dir, '/Dataset_848')).folder;
+Dir = '/scratch/szhu2/Dataset_848'
+rootdir = dir(Dir).folder;
 myFiles = dir(fullfile(rootdir, '*/*.dat'));
 
 %% Loop through all data files in all folders
@@ -56,6 +56,7 @@ for k = 1:length(myFiles)
     %% Doppler-time processing
     TimeWindowLength = 200;
     [Data_spec_MTI2,idx_r] = Spec_Generation(Data_range_MTI,TimeWindowLength);
+    disp(k);
     %Time axis
     axis_spec_time = linspace(Tsweep*TimeWindowLength,Tsweep*TimeWindowLength*size(Data_spec_MTI2,2),size(Data_spec_MTI2,2))';
     %Velocity axis
