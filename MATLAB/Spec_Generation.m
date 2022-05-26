@@ -1,4 +1,4 @@
-function [Data_spec_MTI2,idx_r] = Spec_Generation(Data_range_MTI,TimeWindowLength,is_plot)
+function [Data_spec_MTI2,idx_r] = Spec_Generation(Data_range_MTI,TimeWindowLength)
 
 %% Target localization
 Ns = size(Data_range_MTI,2);
@@ -30,15 +30,3 @@ for i = 1:1:2*intervals+1
     Data_spec_MTI2 = Data_spec_MTI2 + win(i)*abs(Data_MTI_temp);
 end
 Data_spec_MTI2=flipud(Data_spec_MTI2);
-
-% Plot Spectrogram
-if is_plot == 1
-    figure(5)
-    imagesc(20*log10(Data_spec_MTI2)); colormap('jet'); axis xy;
-    colormap;
-    clim = get(gca,'CLim');
-    set(gca, 'CLim', clim(2)+[-40,0]);
-    xlabel('Time[s]', 'FontSize',16);
-    ylabel('Velocity [m/s]','FontSize',16);
-    set(gca, 'FontSize',16);
-end

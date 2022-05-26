@@ -1,4 +1,4 @@
-function [CFAR_2D_out] = CA_CFAR_2D_fast(spectro,CFAR_winv,CFAR_wingv,CFAR_winh,CFAR_wingh,pfa,is_plot)
+function [CFAR_2D_out] = CA_CFAR_2D_fast(spectro,CFAR_winv,CFAR_wingv,CFAR_winh,CFAR_wingh,pfa)
 % CFAR_winh = 7;
 % CFAR_winv = 7;
 % CFAR_wingh = 2;
@@ -20,11 +20,3 @@ total_noise=conv2(spectro,conv_window,'same');
 Noise_power = 1/(Num_training_cells) * total_noise;
 Detection_threshold = threshold_factor * Noise_power;
 CFAR_2D_out((spectro > Detection_threshold) & (spectro > 0))=1;
-
-if is_plot == 1
-    figure(8)
-    mesh(1:size(CFAR_2D_out,2),1:size(CFAR_2D_out,1),CFAR_2D_out);
-    view([0,90])
-    xlabel('Time[s]', 'FontSize',16);
-    ylabel('Velocity [m/s]','FontSize',16);
-end
