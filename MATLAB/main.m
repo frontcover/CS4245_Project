@@ -32,7 +32,7 @@ for k = 1:length(myFiles)
     nc = record_length/Tsweep; % number of chirps
 
     %% plot the processing results?
-    is_plot = 1;
+    is_plot = 0;
 
     %% Range-time processing
     Data_range_MTI = RT_Generation(Data,NTS,nc);
