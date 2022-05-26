@@ -12,18 +12,16 @@ rootdir = dir(fullfile(Dir, '/Dataset_848')).folder;
 myFiles = dir(fullfile(rootdir, '*/*.dat'));
 
 %% Loop through all data files in all folders
-for k = 1:length(myFiles)
-    % Path of the current data file
+for k = 1:length(myFiles) 
+    %% Extract the data sequence
     path = strcat(myFiles(k).folder, '/', myFiles(k).name);
-    
-    % Extract the data sequence
     fileID = fopen(path, 'r');
     dataArray = textscan(fileID, '%f');
     fclose(fileID);
     radarData = dataArray{1};
     clear fileID dataArray ans;
 
-    % Extract radar parameters
+    %% Extract radar parameters
     fc = radarData(1); % Center frequency
     Tsweep = radarData(2)/1000; % Sweep time in sec
     NTS = radarData(3); % Number of time samples per sweep
@@ -33,7 +31,7 @@ for k = 1:length(myFiles)
     record_length = length(Data)/NTS*Tsweep; % length of recording in s
     nc = record_length/Tsweep; % number of chirps
 
-    %plot the range profile?
+    %% plot the processing results?
     is_plot = 1;
 
     %% Range-time processing
@@ -53,17 +51,16 @@ for k = 1:length(myFiles)
     v_max = (physconst('LightSpeed')/fc)/(4*Tsweep);
     axis_spec_velocity = linspace(-v_max/2,v_max/2,size(Data_spec_MTI2,1));
     
-    %% Block from Mujtaba: Detector
+    %% CA_CFAR
     CFAR_winv = 100;
     CFAR_winh = 1;
     CFAR_wingv = 25;
     CFAR_wingh = 0;
     pfa = 5e-3;
-    CFAR_2D_out = CA_CFAR_2D_fast(Data_spec_MTI2,CFAR_winv,CFAR_wingv,CFAR_winh,CFAR_wingh,pfa,1);
-    Data_spec_MTI2 = 20*log10(abs(Data_spec_MTI2));
+    CFAR_2D_out = CA_CFAR_2D_fast(Data_spec_MTI2,CFAR_winv,CFAR_wingv,CFAR_winh,CFAR_wingh,pfa,is_plot);
+    Data_spec_MTI2 = 20*log10(Data_spec_MTI2);
 
     %% Save Point Cloud and Labels
-    
     point_cloud = [];
     for i = 1:size(CFAR_2D_out, 1)
         for j = 1:size(CFAR_2D_out, 2)
@@ -73,8 +70,12 @@ for k = 1:length(myFiles)
             end
         end
     end
+    
+    %% Feature Normalization
+
 
     %% Visualizations
+    
     
 end
 

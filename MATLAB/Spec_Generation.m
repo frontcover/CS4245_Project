@@ -34,7 +34,7 @@ Data_spec_MTI2=flipud(Data_spec_MTI2);
 % Plot Spectrogram
 if is_plot == 1
     figure(5)
-    imagesc(20*log10(abs(Data_spec_MTI2))); colormap('jet'); axis xy;
+    imagesc(20*log10(Data_spec_MTI2)); colormap('jet'); axis xy;
     colormap;
     clim = get(gca,'CLim');
     set(gca, 'CLim', clim(2)+[-40,0]);
