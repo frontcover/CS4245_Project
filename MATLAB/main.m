@@ -45,7 +45,12 @@ for k = 1:length(myFiles)
     [Data_spec_MTI2,idx_r] = Spec_Generation(Data_range_MTI,is_plot);
 
     %% Block from Mujtaba: Detector
-    
+    CFAR_winv = 100;
+    CFAR_winh = 1;
+    CFAR_wingv = 25;
+    CFAR_wingh = 0;
+    pfa = 5e-3;
+    CFAR_2D_out = CA_CFAR_2D_fast(Data_spec_MTI2,CFAR_winv,CFAR_wingv,CFAR_winh,CFAR_wingh,pfa,1);
     %% Save Point Cloud and Labels
 
     %% Visualizations
