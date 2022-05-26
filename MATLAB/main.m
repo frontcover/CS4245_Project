@@ -41,6 +41,8 @@ for k = 1:length(myFiles)
     %Time axis
     axis_RT_time = linspace(Tsweep,Tsweep*size(Data_range_MTI,2),size(Data_range_MTI,2))';
     %Range axis
+    r_max = (fs*0.5*physconst('LightSpeed'))/(2*Bw/Tsweep);
+    axis_RT_range = linspace(0,r_max,size(Data_range_MTI,1));
 
     %% Doppler-time processing
     TimeWindowLength = 200;
@@ -48,6 +50,8 @@ for k = 1:length(myFiles)
     %Time axis
     axis_spec_time = linspace(Tsweep*TimeWindowLength,Tsweep*TimeWindowLength*size(Data_spec_MTI2,2),size(Data_spec_MTI2,2))';
     %Velocity axis
+    v_max = (physconst('LightSpeed')/fc)/(4*Tsweep);
+    axis_spec_velocity = linspace(-v_max/2,v_max/2,size(Data_spec_MTI2,1));
     
     %% Block from Mujtaba: Detector
     CFAR_winv = 100;
@@ -56,7 +60,19 @@ for k = 1:length(myFiles)
     CFAR_wingh = 0;
     pfa = 5e-3;
     CFAR_2D_out = CA_CFAR_2D_fast(Data_spec_MTI2,CFAR_winv,CFAR_wingv,CFAR_winh,CFAR_wingh,pfa,1);
+    Data_spec_MTI2 = 20*log10(abs(Data_spec_MTI2));
+
     %% Save Point Cloud and Labels
+    
+    point_cloud = [];
+    for i = 1:size(CFAR_2D_out, 1)
+        for j = 1:size(CFAR_2D_out, 2)
+            if (CFAR_2D_out(i, j) == 1)
+                time_step = round(axis_spec_time(j)* 1000);
+                point_cloud = [point_cloud [axis_spec_velocity(:,i) ; time_step; Data_spec_MTI2(i, j); axis_RT_range(:, idx_r(:,time_step))]];
+            end
+        end
+    end
 
     %% Visualizations
     
