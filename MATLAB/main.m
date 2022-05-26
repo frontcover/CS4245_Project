@@ -33,17 +33,22 @@ for k = 1:length(myFiles)
     record_length = length(Data)/NTS*Tsweep; % length of recording in s
     nc = record_length/Tsweep; % number of chirps
 
-    % Calculate axis
-
     %plot the range profile?
     is_plot = 1;
 
     %% Range-time processing
     Data_range_MTI = RT_Generation(Data,NTS,nc,is_plot);
+    %Time axis
+    axis_RT_time = linspace(Tsweep,Tsweep*size(Data_range_MTI,2),size(Data_range_MTI,2))';
+    %Range axis
 
     %% Doppler-time processing
-    [Data_spec_MTI2,idx_r] = Spec_Generation(Data_range_MTI,is_plot);
-
+    TimeWindowLength = 200;
+    [Data_spec_MTI2,idx_r] = Spec_Generation(Data_range_MTI,TimeWindowLength,is_plot);
+    %Time axis
+    axis_spec_time = linspace(Tsweep*TimeWindowLength,Tsweep*TimeWindowLength*size(Data_spec_MTI2,2),size(Data_spec_MTI2,2))';
+    %Velocity axis
+    
     %% Block from Mujtaba: Detector
     CFAR_winv = 100;
     CFAR_winh = 1;
