@@ -105,15 +105,43 @@ for k = 1:length(myFiles)
         for j = 1:size(CFAR_2D_out, 2)
             if (CFAR_2D_out(i, j) == 1)
                 time_step = round(axis_spec_time(j)* 1000);
-                point_cloud = [point_cloud [axis_spec_velocity(:,i) ; time_step; Data_spec_MTI2(i, j); axis_RT_range(:, idx_r(:,time_step))]];
+                point_cloud = [point_cloud [axis_spec_velocity(:,i) ; time_step/1000; Data_spec_MTI2(i, j); axis_RT_range(:, idx_r(:,time_step))]];
             end
         end
     end
-    
+    point_cloud = point_cloud';
     writematrix(point_cloud, newFile);
-
+    %% Feature Normalization
+ 
+ 
     %% Visualizations
-    
-
+    if is_plot == 1
+    figure(9)
+    pointcloud1 = point_cloud;
+    pointcloud(:,1)=pointcloud1(:,2);
+    pointcloud(:,2)=pointcloud1(:,4);
+    pointcloud(:,3)=pointcloud1(:,1);
+    pointcloud = pointCloud(pointcloud(:,1:3), Intensity=pointcloud1(:,3));
+    pcshow(pointcloud); 
+    xlabel('Time[s]', 'FontSize',12);
+    ylabel('Range [m]','FontSize',12);
+    zlabel('Velocity [m/s]','FontSize',12);    
+    end
+    [person,activity,repetition] = Label_extract( path );
+    % Create a new label file for output (with necessary folders)
+    [~, folderName] = fileparts(myFiles(k).folder);
+    newFileName = strrep(myFiles(k).name, '.dat', '.txt');
+    if not(isfolder(['Labels/', folderName]))
+       mkdir(['Labels/', folderName]) 
+    end
+    newFile = fullfile('Labels', folderName, newFileName);
+    edit(newFile)
+    fileID = fopen(newFile,'w');
+    formatSpec = '%d\n';
+    fprintf(fileID,formatSpec,str2double(activity));
+    fclose(fileID);
+ 
+ 
 end
+
 
