@@ -25,6 +25,7 @@ win = hamming(intervals*2+1);
 for i = 1:1:2*intervals+1
     idx_r_temp = idx_r - intervals -1 + i;
     idx_r_temp(idx_r_temp<=0) = 1;
+    idx_r_temp(idx_r_temp>=size(Data_range_MTI,1)) = size(Data_range_MTI,1);
     Data_before_fft = Data_range_MTI(sub2ind(size(Data_range_MTI),idx_r_temp,1:Ns));
     Data_MTI_temp = fftshift(spectrogram(Data_before_fft,hamming(TimeWindowLength),OverlapLength,FFTPoints),1);
     Data_spec_MTI2 = Data_spec_MTI2 + win(i)*abs(Data_MTI_temp);

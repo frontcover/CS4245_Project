@@ -7,12 +7,13 @@
 %==========================================================================
 
 %% Extract all the files
-Dir = '/scratch/szhu2/Dataset_848'
+Dir = 'D:\Download\CS4245_Project\MATLAB\Dataset_848';
 rootdir = dir(Dir).folder;
 myFiles = dir(fullfile(rootdir, '*/*.dat'));
 
 %% Loop through all data files in all folders
-for k = 1:length(myFiles) 
+%for k = 1:length(myFiles) 
+for k = 635:length(myFiles) 
     %% Extract the data sequence
     path = strcat(myFiles(k).folder, '/', myFiles(k).name);
     fileID = fopen(path, 'r');
@@ -32,7 +33,7 @@ for k = 1:length(myFiles)
     nc = record_length/Tsweep; % number of chirps
 
     %% plot the processing results?
-    is_plot = 0;
+    is_plot = 1;
 
     %% Range-time processing
     Data_range_MTI = RT_Generation(Data,NTS,nc);
@@ -56,7 +57,6 @@ for k = 1:length(myFiles)
     %% Doppler-time processing
     TimeWindowLength = 200;
     [Data_spec_MTI2,idx_r] = Spec_Generation(Data_range_MTI,TimeWindowLength);
-    disp(k);
     %Time axis
     axis_spec_time = linspace(Tsweep*TimeWindowLength,Tsweep*TimeWindowLength*size(Data_spec_MTI2,2),size(Data_spec_MTI2,2))';
     %Velocity axis
@@ -79,7 +79,7 @@ for k = 1:length(myFiles)
     CFAR_winh = 1;
     CFAR_wingv = 25;
     CFAR_wingh = 0;
-    pfa = 5e-3;
+    pfa = 5e-5;
     CFAR_2D_out = CA_CFAR_2D_fast(Data_spec_MTI2,CFAR_winv,CFAR_wingv,CFAR_winh,CFAR_wingh,pfa);
     Data_spec_MTI2 = 20*log10(Data_spec_MTI2);
     if is_plot == 1
