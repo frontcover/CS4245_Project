@@ -12,8 +12,7 @@ rootdir = dir(Dir).folder;
 myFiles = dir(fullfile(rootdir, '*/*.dat'));
 
 %% Loop through all data files in all folders
-%for k = 1:length(myFiles) 
-for k = 635:length(myFiles) 
+for k = 1:length(myFiles) 
     %% Extract the data sequence
     path = strcat(myFiles(k).folder, '/', myFiles(k).name);
     fileID = fopen(path, 'r');
