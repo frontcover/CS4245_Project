@@ -7,7 +7,7 @@
 %==========================================================================
 
 %% Extract all the files
-Dir = 'D:\Download\CS4245_Project\MATLAB\Dataset_848';
+Dir = '/scratch/szhu2/Dataset_848';
 rootdir = dir(Dir).folder;
 myFiles = dir(fullfile(rootdir, '*/*.dat'));
 
@@ -32,7 +32,7 @@ for k = 1:length(myFiles)
     nc = record_length/Tsweep; % number of chirps
 
     %% plot the processing results?
-    is_plot = 1;
+    is_plot = 0;
 
     %% Range-time processing
     Data_range_MTI = RT_Generation(Data,NTS,nc);
