@@ -133,7 +133,7 @@ for k = 1:length(myFiles)
        mkdir(['Labels/', folderName]) 
     end
     newFile = fullfile('Labels', folderName, newFileName);
-    edit(newFile)
+    %edit(newFile)
     fileID = fopen(newFile,'w');
     formatSpec = '%d\n';
     fprintf(fileID,formatSpec,str2double(activity));
