@@ -7,14 +7,24 @@
 %==========================================================================
 
 %% Extract all the files
-Dir = '/scratch/szhu2/Dataset_848';
-rootdir = dir(Dir).folder;
+Dir = pwd;
+rootdir = dir(fullfile(Dir, '/Dataset_848')).folder;
 myFiles = dir(fullfile(rootdir, '*/*.dat'));
 
 %% Loop through all data files in all folders
 for k = 1:length(myFiles) 
     %% Extract the data sequence
     path = strcat(myFiles(k).folder, '/', myFiles(k).name);
+    
+    % Create a new csv file for output (with necessary folders)
+    [~, folderName] = fileparts(myFiles(k).folder);
+    newFileName = strrep(myFiles(k).name, '.dat', '.csv');
+    if not(isfolder(['Point Cloud Dataset/', folderName]))
+       mkdir(['Point Cloud Dataset/', folderName]) 
+    end
+    newFile = fullfile('Point Cloud Dataset', folderName, newFileName);
+    edit(newFile)
+    
     fileID = fopen(path, 'r');
     dataArray = textscan(fileID, '%f');
     fclose(fileID);
@@ -100,6 +110,7 @@ for k = 1:length(myFiles)
         end
     end
     
+    writematrix(point_cloud, newFile);
     %% Feature Normalization
 
 
