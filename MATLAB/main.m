@@ -8,7 +8,9 @@
 
 %% Extract all the files
 Dir = pwd;
+%Dir = '/scratch/szhu2/Dataset_848';
 rootdir = dir(fullfile(Dir, '/Dataset_848')).folder;
+%rootdir = dir(Dir).folder;
 myFiles = dir(fullfile(rootdir, '*/*.dat'));
 
 %% Loop through all data files in all folders
