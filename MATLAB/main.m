@@ -23,7 +23,7 @@ for k = 1:length(myFiles)
        mkdir(['Point Cloud Dataset/', folderName]) 
     end
     newFile = fullfile('Point Cloud Dataset', folderName, newFileName);
-    edit(newFile)
+    %edit(newFile)
     
     fileID = fopen(path, 'r');
     dataArray = textscan(fileID, '%f');
@@ -88,7 +88,7 @@ for k = 1:length(myFiles)
     CFAR_winh = 1;
     CFAR_wingv = 25;
     CFAR_wingh = 0;
-    pfa = 5e-5;
+    pfa = 5e-3;
     CFAR_2D_out = CA_CFAR_2D_fast(Data_spec_MTI2,CFAR_winv,CFAR_wingv,CFAR_winh,CFAR_wingh,pfa);
     Data_spec_MTI2 = 20*log10(Data_spec_MTI2);
     if is_plot == 1
@@ -111,8 +111,6 @@ for k = 1:length(myFiles)
     end
     
     writematrix(point_cloud, newFile);
-    %% Feature Normalization
-
 
     %% Visualizations
     
