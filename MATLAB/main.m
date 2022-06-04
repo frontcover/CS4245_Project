@@ -102,12 +102,17 @@ for k = 1:length(myFiles)
     end
 
     %% Save Point Cloud and Labels
-    point_cloud = [];
+    index = 1;
+    point_cloud = zeros(4, sum(CFAR_2D_out, 'all'));
     for i = 1:size(CFAR_2D_out, 1)
         for j = 1:size(CFAR_2D_out, 2)
             if (CFAR_2D_out(i, j) == 1)
                 time_step = round(axis_spec_time(j)* 1000);
-                point_cloud = [point_cloud [time_step/1000; axis_RT_range(:, idx_r(:,time_step)); axis_spec_velocity(:,i) ; Data_spec_MTI2(i, j)]];
+                point_cloud(1, index) = time_step / 1000;
+                point_cloud(2, index) = axis_RT_range(:, idx_r(:,time_step));
+                point_cloud(3, index) = axis_spec_velocity(:,i);
+                point_cloud(4, index) = Data_spec_MTI2(i, j);
+                index = index + 1;
             end
         end
     end
@@ -119,7 +124,7 @@ for k = 1:length(myFiles)
     %% Visualizations
     if is_plot == 1
     figure(9)
-    pointcloud = pointCloud(point_cloud(:,1:3), Intensity=point_cloud(:,4));
+    pointcloud = pointCloud(point_cloud(:,1:3), point_cloud(:,4));
     pcshow(pointcloud); 
     xlabel('Time[s]', 'FontSize',12);
     ylabel('Range [m]','FontSize',12);
