@@ -2,20 +2,31 @@ import os
 from utils import *
 
 if __name__ == "__main__":
-    for i in os.listdir('MATLAB/Point Cloud Dataset'):
-        print('Directory:', i)
-        for j in os.listdir('MATLAB/Point Cloud Dataset/' + i):
-            print('File:', j)
-            file = open('MATLAB/Point Cloud Dataset/' + i + '/' + j)
-            data = np.genfromtxt('MATLAB/Point Cloud Dataset/' + i + '/' + j, delimiter=',')
-            print(data)
+    list_size = 1024
+    data_set = []
+    label_set = []
+    for folder_name in os.listdir('MATLAB/Point Cloud Dataset'):
+        # print('Directory:', folder_name)
+        for file_name in os.listdir('MATLAB/Point Cloud Dataset/' + folder_name):
+            # print('File:', file_name)
+            file = open('MATLAB/Point Cloud Dataset/' + folder_name + '/' + file_name)
+            data_point = np.genfromtxt('MATLAB/Point Cloud Dataset/' + folder_name + '/' + file_name, delimiter=',').tolist()
+            data_point += [[0, 0, 0, 0]] * (list_size - len(data_point))
+            label_set.append(int(file_name[0]))
+            data_set.append(data_point)
+    label_set = np.array(label_set)
+    data_set = np.array(data_set)
+
+# Data Split for training and testing
+train_dataset = np.random.rand(1500, 1024, 4)
+test_dataset = np.random.rand(300, 1024, 4)
 
 # Model Parameters
 NUM_POINTS = 1024
 NUM_CLASSES = 6
 
 # Inputs
-inputs = keras.Input(shape=(NUM_POINTS, 3))
+inputs = keras.Input(shape=(NUM_POINTS, 4))
 
 # Main Network (T-net removed)
 # x = tnet(inputs, 3)
@@ -43,6 +54,6 @@ model.compile(
     optimizer=keras.optimizers.Adam(learning_rate=0.001),
     metrics=["sparse_categorical_accuracy"],
 )
-model.fit(train_dataset, epochs=20, validation_data=test_dataset)
+# model.fit(train_dataset, epochs=20, validation_data=test_dataset)
 
 # Save the trained model
