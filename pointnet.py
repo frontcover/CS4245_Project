@@ -10,20 +10,30 @@ if __name__ == "__main__":
         for file_name in os.listdir('MATLAB/Point Cloud Dataset/' + folder_name):
             # print('File:', file_name)
             file = open('MATLAB/Point Cloud Dataset/' + folder_name + '/' + file_name)
-            data_point = np.genfromtxt('MATLAB/Point Cloud Dataset/' + folder_name + '/' + file_name, delimiter=',').tolist()
+            data_point = np.genfromtxt('MATLAB/Point Cloud Dataset/' + folder_name + '/' + file_name,
+                                       delimiter=',').tolist()
             data_point += [[0, 0, 0, 0]] * (list_size - len(data_point))
             label_set.append(int(file_name[0]))
             data_set.append(data_point)
     label_set = np.array(label_set)
     data_set = np.array(data_set)
 
-# Data Split for training and testing
-train_dataset = np.random.rand(1500, 1024, 4)
-test_dataset = np.random.rand(300, 1024, 4)
-
 # Model Parameters
 NUM_POINTS = 1024
 NUM_CLASSES = 6
+BATCH_SIZE = 32
+
+# Data Split for training and testing
+train_points = np.random.rand(1500, 1024, 4)
+train_labels = np.random.rand(1500, 6)
+test_points = np.random.rand(300, 1024, 4)
+test_labels = np.random.rand(300, 6)
+
+# Shuffle the data for training and testing
+train_dataset = tf.data.Dataset.from_tensor_slices((train_points, train_labels))
+test_dataset = tf.data.Dataset.from_tensor_slices((test_points, test_labels))
+train_dataset = train_dataset.shuffle(len(train_points)).batch(BATCH_SIZE)
+test_dataset = test_dataset.shuffle(len(test_points)).batch(BATCH_SIZE)
 
 # Inputs
 inputs = keras.Input(shape=(NUM_POINTS, 4))
@@ -54,6 +64,6 @@ model.compile(
     optimizer=keras.optimizers.Adam(learning_rate=0.001),
     metrics=["sparse_categorical_accuracy"],
 )
-# model.fit(train_dataset, epochs=20, validation_data=test_dataset)
+model.fit(train_dataset, epochs=20, validation_data=test_dataset)
 
 # Save the trained model
