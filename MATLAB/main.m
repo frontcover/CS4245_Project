@@ -5,14 +5,14 @@
 % Authors #2 Mujtaba
 % Version 1.0
 %==========================================================================
-
+ 
 %% Extract all the files
 Dir = pwd;
 %Dir = '/scratch/szhu2/Dataset_848';
 rootdir = dir(fullfile(Dir, '/Dataset_848')).folder;
 %rootdir = dir(Dir).folder;
 myFiles = dir(fullfile(rootdir, '*/*.dat'));
-
+ 
 %% Loop through all data files in all folders
 for k = 1:length(myFiles) 
     %% Extract the data sequence
@@ -32,7 +32,7 @@ for k = 1:length(myFiles)
     fclose(fileID);
     radarData = dataArray{1};
     clear fileID dataArray ans;
-
+ 
     %% Extract radar parameters
     fc = radarData(1); % Center frequency
     Tsweep = radarData(2)/1000; % Sweep time in sec
@@ -42,10 +42,10 @@ for k = 1:length(myFiles)
     fs = NTS/Tsweep; % sampling frequency ADC
     record_length = length(Data)/NTS*Tsweep; % length of recording in s
     nc = record_length/Tsweep; % number of chirps
-
+ 
     %% plot the processing results?
     is_plot = 0;
-
+ 
     %% Range-time processing
     Data_range_MTI = RT_Generation(Data,NTS,nc);
     %Time axis
@@ -64,7 +64,7 @@ for k = 1:length(myFiles)
         clim = get(gca,'CLim'); axis xy;
         set(gca, 'CLim', clim(2)+[-60,0]);
     end
-
+ 
     %% Doppler-time processing
     TimeWindowLength = 200;
     [Data_spec_MTI2,idx_r] = Spec_Generation(Data_range_MTI,TimeWindowLength);
@@ -84,14 +84,16 @@ for k = 1:length(myFiles)
         ylabel('Velocity [m/s]','FontSize',16);
         set(gca, 'FontSize',16);
     end
-
+ 
     %% CA_CFAR
     CFAR_winv = 100;
-    CFAR_winh = 1;
+    CFAR_winh = 100;
     CFAR_wingv = 25;
-    CFAR_wingh = 0;
+    CFAR_wingh = 25;
     pfa = 5e-3;
-    CFAR_2D_out = CA_CFAR_2D_fast(Data_spec_MTI2,CFAR_winv,CFAR_wingv,CFAR_winh,CFAR_wingh,pfa);
+    CFAR_2D_out_h = CA_CFAR_2D_fast(Data_spec_MTI2,CFAR_winv,CFAR_wingv,1,0,pfa);
+    CFAR_2D_out_v = CA_CFAR_2D_fast(Data_spec_MTI2,1,0,CFAR_winh,CFAR_wingh,pfa);
+    CFAR_2D_out = CFAR_2D_out_h .* CFAR_2D_out_v;
     Data_spec_MTI2 = 20*log10(Data_spec_MTI2);
     if is_plot == 1
         figure(3)
@@ -100,7 +102,7 @@ for k = 1:length(myFiles)
         xlabel('Time[s]', 'FontSize',16);
         ylabel('Velocity [m/s]','FontSize',16);
     end
-
+ 
     %% Save Point Cloud and Labels
     index = 1;
     point_cloud = zeros(4, sum(CFAR_2D_out, 'all'));
@@ -140,10 +142,12 @@ for k = 1:length(myFiles)
     newFile = fullfile('Labels', folderName, newFileName);
     %edit(newFile)
     fileID = fopen(newFile,'w');
-    formatSpec = '%d\n';
+    formatSpec = '%d';
     fprintf(fileID,formatSpec,str2double(activity));
     fclose(fileID);
  
 end
+ 
+ 
 
 
