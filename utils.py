@@ -4,8 +4,10 @@
 # Description: Implementation of PointNet for ModelNet10 classification.
 # Link: https://colab.research.google.com/github/keras-team/keras-io/blob/master/examples/vision/ipynb/pointnet.ipynb#scrollTo=fNjnhuBSXCs0
 #############################################################################
-from tensorflow.keras import layers
-
+import tensorflow as tf
+from tensorflow.python import keras
+from tensorflow.python.keras import layers
+import numpy as np
 
 def conv_bn(x, filters):
     x = layers.Conv1D(filters, kernel_size=1, padding="valid")(x)
@@ -31,23 +33,24 @@ class OrthogonalRegularizer(keras.regularizers.Regularizer):
         xxt = tf.reshape(xxt, (-1, self.num_features, self.num_features))
         return tf.reduce_sum(self.l2reg * tf.square(xxt - self.eye))
 
-    def tnet(inputs, num_features):
-        # Initalise bias as the indentity matrix
-        bias = keras.initializers.Constant(np.eye(num_features).flatten())
-        reg = OrthogonalRegularizer(num_features)
 
-        x = conv_bn(inputs, 32)
-        x = conv_bn(x, 64)
-        x = conv_bn(x, 512)
-        x = layers.GlobalMaxPooling1D()(x)
-        x = dense_bn(x, 256)
-        x = dense_bn(x, 128)
-        x = layers.Dense(
-            num_features * num_features,
-            kernel_initializer="zeros",
-            bias_initializer=bias,
-            activity_regularizer=reg,
-        )(x)
-        feat_T = layers.Reshape((num_features, num_features))(x)
-        # Apply affine transformation to input features
-        return layers.Dot(axes=(2, 1))([inputs, feat_T])
+def tnet(inputs, num_features):
+    # Initalise bias as the indentity matrix
+    bias = keras.initializers.Constant(np.eye(num_features).flatten())
+    reg = OrthogonalRegularizer(num_features)
+
+    x = conv_bn(inputs, 32)
+    x = conv_bn(x, 64)
+    x = conv_bn(x, 512)
+    x = layers.GlobalMaxPooling1D()(x)
+    x = dense_bn(x, 256)
+    x = dense_bn(x, 128)
+    x = layers.Dense(
+        num_features * num_features,
+        kernel_initializer="zeros",
+        bias_initializer=bias,
+        activity_regularizer=reg,
+    )(x)
+    feat_T = layers.Reshape((num_features, num_features))(x)
+    # Apply affine transformation to input features
+    return layers.Dot(axes=(2, 1))([inputs, feat_T])
