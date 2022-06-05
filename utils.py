@@ -5,7 +5,7 @@
 # Link: https://colab.research.google.com/github/keras-team/keras-io/blob/master/examples/vision/ipynb/pointnet.ipynb#scrollTo=fNjnhuBSXCs0
 #############################################################################
 import tensorflow as tf
-from tensorflow.python.keras import layers
+from tensorflow.keras import layers
 import numpy as np
 
 

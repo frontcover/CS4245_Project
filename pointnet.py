@@ -1,5 +1,7 @@
 import os
 from utils import *
+from tensorflow import keras
+from sklearn.model_selection import train_test_split
 
 if __name__ == "__main__":
     list_size = 1024
@@ -12,10 +14,15 @@ if __name__ == "__main__":
             file = open('MATLAB/Point Cloud Dataset/' + folder_name + '/' + file_name)
             data_point = np.genfromtxt('MATLAB/Point Cloud Dataset/' + folder_name + '/' + file_name,
                                        delimiter=',').tolist()
+            # Data Normalization
+            data_point = np.array(data_point)
+            data_point = np.ndarray.tolist(
+                (data_point - np.mean(data_point, axis=0)) / (np.std(data_point, axis=0) + 1e-6))
             data_point += [[0, 0, 0, 0]] * (list_size - len(data_point))
             label_set.append(int(file_name[0]))
             data_set.append(data_point)
-    label_set = np.array(label_set)
+    label_set = np.expand_dims(np.array(label_set), -1)
+    label_set = label_set - 1
     data_set = np.array(data_set)
 
 # Model Parameters
@@ -24,10 +31,8 @@ NUM_CLASSES = 6
 BATCH_SIZE = 32
 
 # Data Split for training and testing
-train_points = np.random.rand(1500, 1024, 4)
-train_labels = np.random.rand(1500, 6)
-test_points = np.random.rand(300, 1024, 4)
-test_labels = np.random.rand(300, 6)
+train_points, test_points, train_labels, test_labels = train_test_split(data_set, label_set, test_size=0.20,
+                                                                        random_state=42)
 
 # Shuffle the data for training and testing
 train_dataset = tf.data.Dataset.from_tensor_slices((train_points, train_labels))
