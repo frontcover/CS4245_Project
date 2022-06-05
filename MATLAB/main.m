@@ -118,8 +118,6 @@ for k = 1:length(myFiles)
     end
     point_cloud = point_cloud';
     writematrix(point_cloud, newFile);
-    %% Feature Normalization
- 
  
     %% Visualizations
     if is_plot == 1
