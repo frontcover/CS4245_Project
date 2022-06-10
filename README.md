@@ -64,27 +64,27 @@ $$
 
 Where $f_c$ is the carrier frequency, and $\beta$ is the coefficient that represents the slope of the chirp (chirp rate), it can be expressed as $\beta=\frac{B}{T_s}$, where $B$ is the bandwidth and $T_s$ is the chirp time. After the signal hits the target, the received signal has the following form: 
 
-\begin{equation}
+$$
     S_{rx}(t)=\alpha \cdot e^{j2\pi (f_{c}(t-\tau (t))+\frac{\beta (t-\tau (t))^2}{2})},
-\end{equation}
+$$
 
 Where $\alpha$ represents a complex attenuation on the signal, and $\tau(t)=\frac{2R(t)}{c}$ represents the round-trip time needed for the electromagnetic wave. If we assume that the velocity $v_0$ of the target is constant, then the range of the target is a function of time and can be represented with the formula $R(t)=R_{0}- v_{0}t$, where $R_0$ is the initial distance between the radar and target. Therefore, the time delay can be obtained: 
 
-\begin{equation}
+$$
     \tau(t)=\frac{2R_{0}}{c}-\frac{2v_{0}t}{c}=\tau_{0}-\frac{2v_{0}t}{c},
-\end{equation}
+$$
 
 The second part of the equation $\frac{2v_{0}t}{c}$ makes up the Doppler shift in frequency due to the speed of the target. Here, the assumption is made that this influence of Doppler shift is negligible compared to the beat signal, leaving us with $\tau(t)=\tau_{0}$. As seen in Figure 1, after the transmitted and received signals are passed through the mixer, we obtain the beat signal:
 
-\begin{equation}
+$$
     S_{b}=S_{tx}S^{*}_{rx}=\alpha \cdot e^{j2\pi(f_ct +\frac{\beta t^2}{2} -f_{c}(t-\tau (t))-\frac{\beta (t-\tau (t))^2}{2})},
-\end{equation}
+$$
 
 when we substitute $\tau(t)=\tau_0$, and cancel out the same terms we get:
 
-\begin{equation}
+$$
     S_{b}=\alpha \cdot e^{j2\pi(\beta \tau_0t+f_c\tau_0 -\frac{\beta}{2}\tau^2_0)}=\alpha \cdot e^{j2\pi(f_bt+\phi_0)},
-\end{equation}
+$$
 
 From this we can conclude that by analyzing the power spectrum of the beat signal and finding which frequency components are present in the beat signal, we can obtain the range and returned power from the radar to the targets. The range information can be calculated in the following manner: $f_b=\beta \tau_0=\frac{B}{T_s} \frac{2R_0}{c}=\frac{2BR_0}{cT_s}$, from here the range is $R_0=f_b \cdot \frac{cT_s}{2B}$. As it could be noticed, the range of the target is directly proportional to the beat frequency.
 
@@ -95,15 +95,15 @@ In this project, the second method is used to determine the velocity of the targ
 
 For the 5.8GHz FMCW radar, the wavelength would be $\lambda=\frac{c}{f}=5.2cm$. Although, as explained in the previous paragraph, the Doppler shift will not result in a noticeable frequency change, the phase change is significant. The phase changed can be obtained by:
 
-\begin{equation}
+$$
     \Delta \phi = 2 \pi f_c \Delta \tau= \frac{4\pi \Delta d}{\lambda}.
-\end{equation} 
+$$
 
 For example, a velocity of $10m/s$ during a scan period of $T_c=1 ms$ will introduce a phase change of $\approx 13.8^{\circ}$ between each chirp, but it will only make a range displacement of only 0.01m during one chirp. For this reason, we see that the phase shift between the peaks of the two consecutive chirps contains the information on the velocity of the target. Finally, if we substitute that the relative displacement of the target is equal to $\Delta d=v \cdot T_c$, we obtain the following formula for the velocity: 
 
-\begin{equation}
+$$
     \Delta \phi = \frac{4\pi v T_c}{\lambda} => v=\frac{\lambda \Delta \phi}{4 \pi T_c}.
-\end{equation} 
+$$
 
 ### Visualization
 According to the above-discussed theories, the raw radar data is processed. In this section, we will show some visualization examples of the extracted features from the used radar dataset. 
