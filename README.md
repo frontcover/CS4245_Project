@@ -58,9 +58,9 @@ In this project, an FMCW radar is used to obtain the information about the targe
 #### Range-Power Estimation
 In order to obtain the range of the target, the following wave is sent through the transmitter:
 
-\begin{equation}
+$$
     S_{tx}(t)=e^{j2\pi (f_{c}t+\frac{\beta t^2}{2})}, t \in [0,T_{s}]
-\end{equation} 
+$$
 
 Where $f_c$ is the carrier frequency, and $\beta$ is the coefficient that represents the slope of the chirp (chirp rate), it can be expressed as $\beta=\frac{B}{T_s}$, where $B$ is the bandwidth and $T_s$ is the chirp time. After the signal hits the target, the received signal has the following form: 
 
