@@ -52,6 +52,7 @@ As for the hardware, the data was collected using a monostatic frequency-modulat
 
 ### Feature Extraction
 In this project, an FMCW radar is used to obtain the information about the targets. The idea behind this radar is to transmit a frequency modulated signal whose frequency is changing over time from central $f_0$ to cover a certain bandwidth $B$ (as explained in Figure 1, and the reflected signals from the target are recorded by the receiving antenna. One transmission of the signal with frequency going from $f_0$ to $f_{0}+B$ is called a chirp. The reflected signal from the target will have a complex attenuation and a certain delay which are proportional to the distance of the target from the radar. Thus, multiplying (mixing) the transmitted and received signals at the receiving end of the radar, due to the time delay, there will be two main frequencies in the obtained signal: one (comparatively smaller- called beat signal) related to the delay of the reflected signal, and a second one in the order of carrier frequency. Using a low pass filter, the carrier frequency component will be filtered out, and the beat signal will contain frequency components that are directly proportional to the distance of the possible targets.
+
 ![](https://i.imgur.com/N06aOsl.png)
 *Figure 1: Schematic representation of how data is obtained using transmitted signal(TX) and received reflected signal(RX)*
 
